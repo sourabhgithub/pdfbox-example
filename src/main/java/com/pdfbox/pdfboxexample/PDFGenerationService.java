@@ -178,6 +178,7 @@ public class PDFGenerationService {
         Frame frame = new Frame(paragraph, document.getPageWidth(),null);
         frame.setShape(new RoundRect(15));
         frame.setBorder(Color.GRAY, new Stroke(3));
+        frame.setBackgroundColor(Color.lightGray);
         frame.setPadding(20, 15, 10, 15);
         frame.setMargin(0, 50, 20, 10);
         document.add(frame);
