@@ -12,13 +12,14 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
 
 @Service
 public class PDFServices {
-//    @Autowired
-//    PDFGenerationService pdfGenerator;
+    @Autowired
+    PDFGenerationService pdfGenerator;
 
     public  IncomeAndEmploymentResponse getIncomeAndEmploymentResponse(){
         IncomeAndEmploymentResponse response = null;
@@ -132,13 +133,12 @@ public class PDFServices {
 
     }
 
-    public void generatePDF(IncomeAndEmploymentResponse response) throws IOException, ParseException {
-       new PDFGenerationService().generatePDF(response);
+    public void generatePDF( HttpServletResponse response) throws IOException, ParseException {
+       pdfGenerator.generatePDF(response,getIncomeAndEmploymentResponse());
     }
     public static void main(String[] args) throws IOException, ParseException {
         PDFServices serv = new PDFServices();
         IncomeAndEmploymentResponse response = serv.getIncomeAndEmploymentResponse();
-        serv.generatePDF(response);
-        
+
     };
 }
