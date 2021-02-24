@@ -12,6 +12,7 @@ repositories {
 	mavenCentral()
 	maven { url 'https://repo.spring.io/milestone' }
 	maven { url 'https://repo.spring.io/snapshot' }
+	maven { url "https://jitpack.io" }
 }
 
 dependencies {
@@ -19,6 +20,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.apache.pdfbox:pdfbox:2.0.20'
 	compileOnly 'org.projectlombok:lombok:1.18.16'
+	compile 'com.github.ralfstuckert.pdfbox-layout:pdfbox2-layout:1.0.0'
+	implementation group: 'org.json', name: 'json', version: '20160810'
+
 
 	implementation 'org.springframework.boot:spring-boot-starter'
 
