@@ -1,11 +1,11 @@
-package com.pdfbox.response;
+package com.pdfbox.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EmploymentType {
+public class EmploymentStatus {
     private String code;
     private String name;
 
@@ -25,3 +25,4 @@ public class EmploymentType {
         this.name = name;
     }
 }
+

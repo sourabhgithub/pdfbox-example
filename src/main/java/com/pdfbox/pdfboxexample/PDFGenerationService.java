@@ -1,8 +1,6 @@
 package com.pdfbox.pdfboxexample;
 
-import com.pdfbox.response.EmploymentHistory;
-import com.pdfbox.response.IncomeAndEmploymentResponse;
-import com.pdfbox.response.PaymentHistory;
+import com.pdfbox.request.*;
 import org.springframework.stereotype.Service;
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Frame;
@@ -80,7 +78,7 @@ public class PDFGenerationService {
             i++;
             content = new StringBuilder();
             content.append("Employer "+i+" of "+employmentDetails.size()).append("\n")
-                    .append("*"+getSafeString(history.getEmployerName())+"*").append(indentString).append(getSafeString(history.getEmployerAddress().toString())).append("\n\n");
+                    .append("*"+history.getEmployerName()+"*").append(indentString).append(history.getEmployerAddress().toString()).append("\n\n");
 
             content.append("{color:#0000ff}Title").append(getIntend("",20)).
                     append("{color:#0000ff}Hire Date").append(getIntend("",10)).
@@ -97,7 +95,7 @@ public class PDFGenerationService {
             SimpleDateFormat sFrmt = new SimpleDateFormat("mm/DD/yyyy");
             String hireDateStr = sFrmt.format(hireDate);
 
-            String status = history.getEmploymentType().getName();
+            String status = history.getEmploymentStatus().getName();
             status = status == null || status.isEmpty() ? "":status;
 
             String eStatus = history.getEmploymentStatus().getName();
@@ -120,10 +118,10 @@ public class PDFGenerationService {
             paragraph.addMarkup(pHistory.getPayDate()+indentString, HEADER_FONTSIZE, BaseFont.Times);
 
             paragraph.addMarkup("{color:#0000ff}Pay Frequency :", HEADER_FONTSIZE, BaseFont.Times);
-            paragraph.addMarkup(getSafeString(pHistory.getPayCycle())+indentString, HEADER_FONTSIZE, BaseFont.Times);
+            paragraph.addMarkup(pHistory.getPayCycle()+indentString, HEADER_FONTSIZE, BaseFont.Times);
 
             paragraph.addMarkup("{color:#0000ff}Reporting period :", HEADER_FONTSIZE, BaseFont.Times);
-            paragraph.addMarkup(pHistory.getPayperiod().toString()+"\n\n", HEADER_FONTSIZE, BaseFont.Times);
+            paragraph.addMarkup(pHistory.getPayPeriod().getStartDate()+"\n\n", HEADER_FONTSIZE, BaseFont.Times);
 
 
             content = new StringBuilder();
@@ -192,27 +190,17 @@ public class PDFGenerationService {
         return returnString;
     }
 
-    public void generatePDF(HttpServletResponse httpResponse  , IncomeAndEmploymentResponse response) throws IOException, ParseException {
+    public Document generatePDF(HttpServletResponse httpResponse  , IncomeAndEmploymentRequest incomeAndEmploymentRequest) throws IOException, ParseException {
         Document document = new Document(40, 50, 40, 60);
         generateHeaderTextContent(document);
-        generatePersonalInfo(document,getSafeString(response.getApplicantInformation().getName()),getSafeString(response.getApplicantInformation().getAddress()),getSafeString(response.getSsn()),getSafeString(response.getDob()));
-        generateRequestInfo(document,getSafeString(response.getRequestor().getVerifierName()),getSafeString(response.getRequestor().getSubScriberId()),getSafeString(response.getReportId()),getSafeString(response.getReportGeneratedDate()),getSafeString(response.getRequestor().getSubScriberId()));
-        generateEmploymentInfo(document, response.getEmploymentHistory());
+        ApplicantInformation applicantInformation = incomeAndEmploymentRequest.getIncomeReport().getConsumerPii().getApplicantInformation();
+        IncomeReport incomeReport = incomeAndEmploymentRequest.getIncomeReport();
 
+        generatePersonalInfo(document,applicantInformation.getName().getFirstName()+ " "+ applicantInformation.getName().getLastName(),applicantInformation.getCurrentAddress().getLine1(),applicantInformation.getSsn().getSsn(),applicantInformation.getDob().getDob());
+        generateRequestInfo(document,incomeReport.getRequestor().getSubscriberCode(),incomeReport.getRequestor().getVerifierName(),incomeReport.getReportId(),incomeReport.getReportGeneratedDate(),incomeReport.getRequestor().getSubscriberCode());
+        generateEmploymentInfo(document, incomeAndEmploymentRequest.getIncomeReport().getConsumerPii().getEmploymentHistory());
+        return document ;
 
-//        final OutputStream outputStream = new FileOutputStream(
-//                "IncomeAndEmploymentDetails.pdf");
-        document.save(httpResponse.getOutputStream());
-
-        httpResponse.addHeader("Content-disposition", "attachment; filename=" + "IncomeAndEmploymentDetails.pdf");
-        httpResponse.setContentType("application/pdf");
-        httpResponse.flushBuffer();
-    }
-
-    private String getSafeString(String obj){
-        if(obj == null)
-            return "";
-        return  obj;
     }
 
 }
