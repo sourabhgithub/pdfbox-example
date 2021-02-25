@@ -24,5 +24,7 @@ public class EmploymentStatus {
     public void setName(String name) {
         this.name = name;
     }
+
+
 }
 
