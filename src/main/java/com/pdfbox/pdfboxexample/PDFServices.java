@@ -15,8 +15,8 @@ public class PDFServices {
     PDFGenerationService pdfGenerator;
 
 
-    public Document generatePDF(HttpServletResponse response, IncomeAndEmploymentRequest incomeAndEmploymentRequest) throws IOException, ParseException {
-       return pdfGenerator.generatePDF(response,incomeAndEmploymentRequest);
+    public Document generatePDF(IncomeAndEmploymentRequest incomeAndEmploymentRequest) throws IOException, ParseException {
+       return pdfGenerator.generatePDF(incomeAndEmploymentRequest);
     }
 
 }

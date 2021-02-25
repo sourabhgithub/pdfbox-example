@@ -165,6 +165,7 @@ public class TestData {
         paymentHistory1.setPayCycle("BIWEEKLY");
         paymentHistory1.setPayPeriod(getPayPeriod());
         paymentHistory1.setGrossPayAmount(getGrossPayAmount());
+
         paymentHistory.add(paymentHistory1);
 
         PaymentHistory paymentHistory2 = new PaymentHistory();
@@ -185,6 +186,10 @@ public class TestData {
         grossPayAmount.setYtdGrossPay(11.1);
         grossPayAmount.setCommission(1.1);
         grossPayAmount.setRate(50.0);
+        grossPayAmount.setDeduction("Current Deduction");
+        grossPayAmount.setCurrent(500.0);
+        grossPayAmount.setYtdTotal(6000.0);
+
 
 
         return grossPayAmount;

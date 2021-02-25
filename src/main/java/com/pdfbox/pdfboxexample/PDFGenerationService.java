@@ -83,7 +83,13 @@ public class PDFGenerationService {
             i++;
             content = new StringBuilder();
             content.append("Employer "+i+" of "+employmentDetails.size()).append("\n")
-                    .append("*"+history.getEmployerName()+"*").append(indentString).append(history.getEmployerAddress().toString()).append("\n\n");
+                    .append("*"+history.getEmployerName()+"*").append(indentString).append(history.getEmployerAddress().getLineOne()).append(", ")
+                    .append(history.getEmployerAddress().getLineOne()).append(", ")
+                    .append(history.getEmployerAddress().getLineTwo()).append(", ")
+                    .append(history.getEmployerAddress().getLineThree()).append(", ")
+                    .append(history.getEmployerAddress().getCityName()).append(", ")
+                    .append(history.getEmployerAddress().getState()).append(", ")
+                    .append(history.getEmployerAddress().getPostalCode()).append("\n\n");
 
             content.append("{color:#0000ff}Title").append(getIntend("",20)).
                     append("{color:#0000ff}Hire Date").append(getIntend("",10)).
@@ -149,13 +155,13 @@ public class PDFGenerationService {
                String grossPay = payment.getGrossPayAmount().getAmount()== null ? "N/A" : String.valueOf(payment.getGrossPayAmount().getAmount());
 
                content = new StringBuilder();
-               content.append("Base Pay").append(getIntend("Base Pay", 12)).
+               content.append("Base Pay").append(getIntend("Base Pay", 15)).
                        append(rate).append(getIntend(rate, 9)).
                        append(hours).append(getIntend(hours, 10)).
                        append(grossPay).append(getIntend(grossPay, 14)).
                        append(overTime).append(getIntend(overTime, 19)).
                        append(bonus).append(getIntend(bonus, 17))
-                       .append(commissin).append(getIntend(commissin, 22)).
+                       .append(commissin).append(getIntend(commissin, 25)).
                        append(ytdGrossPay+"\n");
            }
             paragraph.addMarkup(content.toString()+"\n\n", HEADER_FONTSIZE, BaseFont.Times);
@@ -170,11 +176,12 @@ public class PDFGenerationService {
             paragraph.addMarkup(content.toString(), HEADER_FONTSIZE, BaseFont.Times);
             paragraph.setAlignment(Alignment.Center);
             content = new StringBuilder();
-            content.append("Fica Medicare").append(getIntend("Fica Medicare",20)).
-                    append("$400").append(getIntend("$400",9)).
-                    append("$70000\n");
+            content.append(pHistory.getGrossPayAmount().getDeduction()).append(getIntend(pHistory.getGrossPayAmount().getDeduction(),20)).
+                    append(pHistory.getGrossPayAmount().getCurrent()).append(getIntend(""+pHistory.getGrossPayAmount().getCurrent(),13)).
+                    append(pHistory.getGrossPayAmount().getYtdTotal()+"\n");
             paragraph.addMarkup(content.toString()
                     +"\n\n", 11, BaseFont.Times);
+            paragraph.add(new Indent(0, SpaceUnit.pt));
             paragraph.setAlignment(Alignment.Left);
         }
 
@@ -182,7 +189,7 @@ public class PDFGenerationService {
         frame.setShape(new RoundRect(15));
         frame.setBorder(Color.GRAY, new Stroke(3));
         frame.setBackgroundColor(Color.lightGray);
-        frame.setPadding(20, 15, 10, 15);
+        frame.setPadding(10, 10, 10, 15);
         frame.setMargin(0, 50, 20, 10);
         document.add(frame);
     }
@@ -195,7 +202,7 @@ public class PDFGenerationService {
         return returnString;
     }
 
-    public Document generatePDF(HttpServletResponse httpResponse  , IncomeAndEmploymentRequest incomeAndEmploymentRequest) throws IOException, ParseException {
+    public Document generatePDF(IncomeAndEmploymentRequest incomeAndEmploymentRequest) throws IOException, ParseException {
         Document document = new Document(40, 50, 40, 60);
         generateHeaderTextContent(document);
         ApplicantInformation applicantInformation = incomeAndEmploymentRequest.getIncomeReport().getConsumerPii().getApplicantInformation();

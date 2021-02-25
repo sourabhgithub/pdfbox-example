@@ -13,6 +13,10 @@ public class GrossPayAmount {
     private Double commission;
     private Double overtime;
     private Double ytdGrossPay;
+    private Double current;
+    private String deduction;
+    private Double ytdTotal;
+
     private String currencyCode;
 
     public Double getAmount() {
@@ -77,6 +81,30 @@ public class GrossPayAmount {
 
     public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
+    }
+
+    public Double getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(Double current) {
+        this.current = current;
+    }
+
+    public String getDeduction() {
+        return deduction;
+    }
+
+    public void setDeduction(String deduction) {
+        this.deduction = deduction;
+    }
+
+    public Double getYtdTotal() {
+        return ytdTotal;
+    }
+
+    public void setYtdTotal(Double ytdTotal) {
+        this.ytdTotal = ytdTotal;
     }
 }
 

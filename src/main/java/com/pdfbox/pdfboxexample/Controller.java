@@ -24,13 +24,17 @@ public class Controller {
     public ResponseEntity<Resource> returnObjectInBrowser( HttpServletResponse response) throws IOException, ParseException {
 
 
+        response.setContentType("application/force-download");
+
+       // response.setHeader("Content-Transfer-Encoding", "binary");
+        response.setHeader("Content-Disposition","attachment; filename=" + "IncomeAndEmploymentDetails.pdf");//fileName);
         IncomeAndEmploymentRequest incomeAndEmploymentRequest = TestData.getIncomeAndEmploymentRequest();
-        Document document = service.generatePDF(response,incomeAndEmploymentRequest);
+        Document document = service.generatePDF(incomeAndEmploymentRequest);
         document.save(response.getOutputStream());
 
-        response.addHeader("Content-disposition", "attachment; filename=" + "IncomeAndEmploymentDetails.pdf");
-        response.addHeader("Content-Type", "application/force-download");
         response.flushBuffer();
+
+
 
         return null;
     }
