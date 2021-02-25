@@ -38,6 +38,11 @@ public class PDFGenerationService {
         paragraph1.setAlignment(Alignment.Right);
         document.add(paragraph1);
     }
+    private  void generateFooter(Document document) throws IOException {
+        Paragraph paragraph1 = new Paragraph();
+        paragraph1.addMarkup("Hello This  is Footer note \n Footer Note Again\n *", 12, BaseFont.Times);
+        document.add(paragraph1);
+    }
 
     private  void generatePersonalInfo(Document document, String name, String address, String ssn, String dob) throws IOException {
         Paragraph paragraph = new Paragraph();
@@ -195,6 +200,7 @@ public class PDFGenerationService {
         generateHeaderTextContent(document);
         ApplicantInformation applicantInformation = incomeAndEmploymentRequest.getIncomeReport().getConsumerPii().getApplicantInformation();
         IncomeReport incomeReport = incomeAndEmploymentRequest.getIncomeReport();
+
 
         generatePersonalInfo(document,applicantInformation.getName().getFirstName()+ " "+ applicantInformation.getName().getLastName(),applicantInformation.getCurrentAddress().getLine1(),applicantInformation.getSsn().getSsn(),applicantInformation.getDob().getDob());
         generateRequestInfo(document,incomeReport.getRequestor().getSubscriberCode(),incomeReport.getRequestor().getVerifierName(),incomeReport.getReportId(),incomeReport.getReportGeneratedDate(),incomeReport.getRequestor().getSubscriberCode());
